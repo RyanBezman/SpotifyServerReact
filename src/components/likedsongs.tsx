@@ -1,4 +1,19 @@
-export function LikedSongs() {
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+export async function LikedSongs() {
+  const songs = await prisma.song.findMany({
+    include: {
+      album: {
+        include: {
+          artist: true,
+        },
+      },
+    },
+  });
+  console.log(songs);
+
   return (
     <>
       <div className="heart-wrapper">
@@ -145,292 +160,48 @@ export function LikedSongs() {
               </svg>
             </div>
           </div>
-          <div className="song-row">
-            <div className="song-number">1</div>
-            <div className="song-title">
-              <img
-                aria-hidden="false"
-                draggable="false"
-                loading="eager"
-                src="https://i.scdn.co/image/ab67616d000048511dacfbc31cc873d132958af9"
-                alt=""
-                className="album-image"
-                width="40"
-                height="40"
-              />
-              <div className="song-container">
-                <div className="song-name">Bound 2</div>
-                <div className="artist-wrapper">
-                  <div className="explicit">E</div>
-                  <div className="artist-name">Kanye West</div>
+          {songs.map((song, index) => {
+            return (
+              <div className="song-row" key={song.id}>
+                <div className="song-number">{index + 1}</div>
+                <div className="song-title">
+                  <img
+                    aria-hidden="false"
+                    draggable="false"
+                    loading="eager"
+                    src="https://i.scdn.co/image/ab67616d000048511dacfbc31cc873d132958af9"
+                    alt=""
+                    className="album-image"
+                    width="40"
+                    height="40"
+                  />
+                  <div className="song-container">
+                    <div className="song-name">{song.name}</div>
+                    <div className="artist-wrapper">
+                      {song.explicit ? <div className="explicit">E</div> : null}
+                      <div className="artist-name">
+                        {song.album.artist?.name}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="song-album">{song.album.name}</div>
+                <div className="song-date">Dec 22, 2023</div>
+                <div className="song-liked-time">
+                  <svg
+                    data-encore-id="icon"
+                    role="img"
+                    aria-hidden="true"
+                    viewBox="0 0 16 16"
+                    className="green-heart"
+                  >
+                    <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
+                  </svg>
+                  <div className="time">3:49</div>
                 </div>
               </div>
-            </div>
-            <div className="song-album">Yeezus</div>
-            <div className="song-date">Dec 22, 2023</div>
-            <div className="song-liked-time">
-              <svg
-                data-encore-id="icon"
-                role="img"
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                className="green-heart"
-              >
-                <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
-              </svg>
-              <div className="time">3:49</div>
-            </div>
-          </div>
-          <div className="song-row">
-            <div className="song-number">2</div>
-            <div className="song-title">
-              <img
-                aria-hidden="false"
-                draggable="false"
-                loading="eager"
-                src="https://i.scdn.co/image/ab67616d00004851b077674c6b35c5a416b3fadc"
-                alt=""
-                className="album-image"
-                width="40"
-                height="40"
-              />
-              <div className="song-container">
-                <div className="song-name">Another Round (feat. Chris ...</div>
-                <div className="artist-wrapper">
-                  <div className="explicit">E</div>
-                  <div className="artist-name">Fat Joe, Chris Brown</div>
-                </div>
-              </div>
-            </div>
-            <div className="song-album">Another Round (feat. Chris...</div>
-            <div className="song-date">Jun 24, 2022</div>
-            <div className="song-liked-time">
-              <svg
-                data-encore-id="icon"
-                role="img"
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                className="green-heart"
-              >
-                <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
-              </svg>
-              <div className="time">4:48</div>
-            </div>
-          </div>
-          <div className="song-row">
-            <div className="song-number">3</div>
-            <div className="song-title">
-              <img
-                aria-hidden="false"
-                draggable="false"
-                loading="eager"
-                src="https://i.scdn.co/image/ab67616d000048519ada5159701e3655f3d718aa"
-                alt=""
-                className="album-image"
-                width="40"
-                height="40"
-              />
-              <div className="song-container">
-                <div className="song-name">Rns</div>
-                <div className="artist-wrapper">
-                  <div className="explicit">E</div>
-                  <div className="artist-name">Vado, Jadakiss, Troy Ave</div>
-                </div>
-              </div>
-            </div>
-            <div className="song-album">Slime Flu 4</div>
-            <div className="song-date">Feb 28, 2022</div>
-            <div className="song-liked-time">
-              <svg
-                data-encore-id="icon"
-                role="img"
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                className="green-heart"
-              >
-                <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
-              </svg>
-              <div className="time">3:53</div>
-            </div>
-          </div>
-          <div className="song-row">
-            <div className="song-number">4</div>
-            <div className="song-title">
-              <img
-                aria-hidden="false"
-                draggable="false"
-                loading="eager"
-                src="https://i.scdn.co/image/ab67616d00004851f850a56927d864922a94b570"
-                alt=""
-                className="album-image"
-                width="40"
-                height="40"
-              />
-              <div className="song-container">
-                <div className="song-name">Off da Meter</div>
-                <div className="artist-wrapper">
-                  <div className="explicit">E</div>
-                  <div className="artist-name">Kevin Gates</div>
-                </div>
-              </div>
-            </div>
-            <div className="song-album">Murder for Hire 2</div>
-            <div className="song-date">Jul 13, 2019</div>
-            <div className="song-liked-time">
-              <svg
-                data-encore-id="icon"
-                role="img"
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                className="green-heart"
-              >
-                <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
-              </svg>
-              <div className="time">3:48</div>
-            </div>
-          </div>
-          <div className="song-row">
-            <div className="song-number">5</div>
-            <div className="song-title">
-              <img
-                aria-hidden="false"
-                draggable="false"
-                loading="eager"
-                src="https://i.scdn.co/image/ab67616d00004851f69d27f92bb2af0eb9fa6004"
-                alt=""
-                className="album-image"
-                width="40"
-                height="40"
-              />
-              <div className="song-container">
-                <div className="song-name">Drip Too Hard</div>
-                <div className="artist-wrapper">
-                  <div className="explicit">E</div>
-                  <div className="artist-name">Lil Baby, Gunna</div>
-                </div>
-              </div>
-            </div>
-            <div className="song-album">Drip Too Hard</div>
-            <div className="song-date">Jan 13, 2019</div>
-            <div className="song-liked-time">
-              <svg
-                data-encore-id="icon"
-                role="img"
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                className="green-heart"
-              >
-                <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
-              </svg>
-              <div className="time">2:25</div>
-            </div>
-          </div>
-          <div className="song-row">
-            <div className="song-number">6</div>
-            <div className="song-title">
-              <img
-                aria-hidden="false"
-                draggable="false"
-                loading="eager"
-                src="https://i.scdn.co/image/ab67616d000048519d34eb283c35118bdcd2f18a"
-                alt=""
-                className="album-image"
-                width="40"
-                height="40"
-              />
-              <div className="song-container">
-                <div className="song-name">Jus Wanna</div>
-                <div className="artist-wrapper">
-                  <div className="explicit">E</div>
-                  <div className="artist-name">Kevin Gates</div>
-                </div>
-              </div>
-            </div>
-            <div className="song-album">By Any Means 2</div>
-            <div className="song-date">Jan 11, 2019</div>
-            <div className="song-liked-time">
-              <svg
-                data-encore-id="icon"
-                role="img"
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                className="green-heart"
-              >
-                <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
-              </svg>
-              <div className="time">3:51</div>
-            </div>
-          </div>
-          <div className="song-row">
-            <div className="song-number">7</div>
-            <div className="song-title">
-              <img
-                aria-hidden="false"
-                draggable="false"
-                loading="eager"
-                src="https://i.scdn.co/image/ab67616d00004851f1cfa41a28a0a2d3ef90faaa"
-                alt=""
-                className="album-image"
-                width="40"
-                height="40"
-              />
-              <div className="song-container">
-                <div className="song-name">Fearless</div>
-                <div className="artist-wrapper">
-                  <div className="artist-name">Lost Sky</div>
-                </div>
-              </div>
-            </div>
-            <div className="song-album">Fearless</div>
-            <div className="song-date">Sep 28, 2018</div>
-            <div className="song-liked-time">
-              <svg
-                data-encore-id="icon"
-                role="img"
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                className="green-heart"
-              >
-                <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
-              </svg>
-              <div className="time">3:14</div>
-            </div>
-          </div>
-          <div className="song-row">
-            <div className="song-number">8</div>
-            <div className="song-title">
-              <img
-                aria-hidden="false"
-                draggable="false"
-                loading="eager"
-                src="https://i.scdn.co/image/ab67616d000048517e09670f90cd47b3fb9a23e0"
-                alt=""
-                className="album-image"
-                width="40"
-                height="40"
-              />
-              <div className="song-container">
-                <div className="song-name">Mr. Jones</div>
-                <div className="artist-wrapper">
-                  <div className="artist-name">Counting Crows</div>
-                </div>
-              </div>
-            </div>
-            <div className="song-album">August and Everything After</div>
-            <div className="song-date">Sep 5, 2018</div>
-            <div className="song-liked-time">
-              <svg
-                data-encore-id="icon"
-                role="img"
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                className="green-heart"
-              >
-                <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
-              </svg>
-              <div className="time">4:32</div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </>
