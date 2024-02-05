@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
+// import { useState } from "react";
 
 const prisma = new PrismaClient();
 
-export async function LikedSongs() {
+export async function Searching() {
   const songs = await prisma.song.findMany({
     include: {
       album: {
@@ -23,6 +24,7 @@ export async function LikedSongs() {
     }
     return `${minutes}:${seconds}`;
   }
+  // const [song, setSong] = useState("");
 
   return (
     <>
@@ -53,7 +55,9 @@ export async function LikedSongs() {
                 </svg>
               </button>
             </div>
-            <div className="mid-spacer"></div>
+            <div className="mid-spacer">
+              <input type="text" className="input-search" />
+            </div>
             <div className="account-buttons">
               <button className="install-button">
                 <svg
@@ -171,7 +175,6 @@ export async function LikedSongs() {
             </div>
           </div>
           {songs.map((song, index) => {
-            console.log(song.album.cover);
             return (
               <div className="song-row" key={song.id}>
                 <div className="song-number">{index + 1}</div>
@@ -180,7 +183,7 @@ export async function LikedSongs() {
                     aria-hidden="false"
                     draggable="false"
                     loading="eager"
-                    src={song.album.cover}
+                    src="https://i.scdn.co/image/ab67616d000048511dacfbc31cc873d132958af9"
                     alt=""
                     className="album-image"
                     width="40"

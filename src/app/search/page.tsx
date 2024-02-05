@@ -1,15 +1,13 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import Link from "next/link";
-import { useState } from "react";
-
 import { Playlists } from "@/components/playlists";
 import { LikedSongs } from "@/components/likedsongs";
 import { HomeSearch } from "@/components/homesearch";
 import { RightSideBar } from "@/components/righsidebar";
 import { BottomPlayBar } from "@/components/bottomplaybar";
+import { Searching } from "@/components/searching";
 
-export default function Home() {
+export default function Search() {
   return (
     <>
       <div className="columns">
@@ -18,7 +16,7 @@ export default function Home() {
           <Playlists />
         </div>
         <div className="column2">
-          <LikedSongs />
+          <Searching />
         </div>
         <div className="column3">
           <RightSideBar />

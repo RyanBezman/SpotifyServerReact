@@ -22,7 +22,7 @@ model Song {
 model Album {
   id       Int     @id @default(autoincrement())
   name     String
-  cover    String
+  cover    String  @default("")
   songs    Song[]
   artist   Artist? @relation(fields: [artistId], references: [id])
   artistId Int?
