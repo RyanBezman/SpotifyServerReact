@@ -1,9 +1,11 @@
 import { PrismaClient } from "@prisma/client";
+import Link from "next/link";
 
 const prisma = new PrismaClient();
 
 export async function Playlists() {
   const albums = await prisma.album.findMany({});
+  const playlists = await prisma.playlist.findMany({});
 
   return (
     <div className="playlist-wrapper">
@@ -56,15 +58,19 @@ export async function Playlists() {
         </header>
         <div className="button-line-wrapper">
           <div className="button-line">
-            <button className="library-buttons">
-              <span className="button-names">Playlists</span>
-            </button>
+            <Link href="/playlines" style={{ textDecoration: "none" }}>
+              <button className="library-buttons">
+                <span className="button-names">Playlists</span>
+              </button>
+            </Link>
             <button className="library-buttons">
               <span className="button-names">Artists</span>
             </button>
-            <button className="library-buttons">
-              <span className="button-names">Albums</span>
-            </button>
+            <Link href="/albums" style={{ textDecoration: "none" }}>
+              <button className="library-buttons">
+                <span className="button-names">Albums</span>
+              </button>
+            </Link>
             <button className="library-buttons">
               <span className="button-names">Podcasts & Shows</span>
             </button>
@@ -118,11 +124,9 @@ export async function Playlists() {
 
         <div className="playlist-art-wrapper">
           <ul className="playlists-list">
-            {albums.map((album) => {
-              console.log(album);
-
+            {playlists.map((playlist) => {
               return (
-                <li className="playlist" id="one" key={album.name}>
+                <li className="playlist" id="one" key={playlist.name}>
                   <div className="playlist-container">
                     <div className="album-cover-wrapper">
                       <img
@@ -130,13 +134,13 @@ export async function Playlists() {
                         aria-hidden="true"
                         draggable="false"
                         loading="eager"
-                        src={album.cover}
+                        src={playlist.albumcover}
                         data-testid="entity-image"
                         alt="Liked Songs"
                       />
                     </div>
                     <div className="album-name-wrapper">
-                      <p className="playlist-name">{album.name}</p>
+                      <p className="playlist-name">{playlist.name}</p>
                       <div className="type-container">
                         <p className="username-type">
                           <span className="pinned-container">

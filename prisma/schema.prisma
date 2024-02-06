@@ -11,12 +11,13 @@ datasource db {
 }
 
 model Song {
-  id       Int     @id @default(autoincrement())
-  name     String
-  explicit Boolean
-  length   Int
-  album    Album   @relation(fields: [albumId], references: [id])
-  albumId  Int
+  id        Int        @id @default(autoincrement())
+  name      String
+  explicit  Boolean
+  length    Int
+  album     Album      @relation(fields: [albumId], references: [id])
+  albumId   Int
+  playlists Playlist[] @relation("SongPlaylists")
 }
 
 model Album {
@@ -32,4 +33,11 @@ model Artist {
   id     Int     @id @default(autoincrement())
   name   String
   albums Album[]
+}
+
+model Playlist {
+  id         Int    @id @default(autoincrement())
+  name       String
+  albumcover String @default("")
+  songs      Song[] @relation("SongPlaylists")
 }
