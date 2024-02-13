@@ -125,8 +125,6 @@ export async function Albums() {
         <div className="playlist-art-wrapper">
           <ul className="playlists-list">
             {albums.map((album) => {
-              console.log(album);
-
               return (
                 <li className="playlist" id="one" key={album.name}>
                   <div className="playlist-container">

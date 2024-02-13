@@ -13,7 +13,6 @@ export async function Searching() {
       },
     },
   });
-  console.log(songs);
 
   function createTime(length: number) {
     const time = length;

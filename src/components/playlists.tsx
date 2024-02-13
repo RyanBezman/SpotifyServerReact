@@ -1,11 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import Link from "next/link";
+import { PlaylistsDropdown } from "./playlistsdropdown";
+import { AlbumsDropdown } from "./albumsdropdown";
+import { ArtistsDropdown } from "./artistsdropdown";
 
 const prisma = new PrismaClient();
 
-export async function Playlists() {
+export async function Playlists(props: { display: string }) {
   const albums = await prisma.album.findMany({});
   const playlists = await prisma.playlist.findMany({});
+  const artists = await prisma.artist.findMany({});
 
   return (
     <div className="playlist-wrapper">
@@ -58,22 +62,26 @@ export async function Playlists() {
         </header>
         <div className="button-line-wrapper">
           <div className="button-line">
-            <Link href="/playlines" style={{ textDecoration: "none" }}>
+            <Link href="?filter=playlists" style={{ textDecoration: "none" }}>
               <button className="library-buttons">
                 <span className="button-names">Playlists</span>
               </button>
             </Link>
-            <button className="library-buttons">
-              <span className="button-names">Artists</span>
-            </button>
-            <Link href="/albums" style={{ textDecoration: "none" }}>
+            <Link href="?filter=artists" style={{ textDecoration: "none" }}>
+              <button className="library-buttons">
+                <span className="button-names">Artists</span>
+              </button>
+            </Link>
+            <Link href="?filter=albums" style={{ textDecoration: "none" }}>
               <button className="library-buttons">
                 <span className="button-names">Albums</span>
               </button>
             </Link>
-            <button className="library-buttons">
-              <span className="button-names">Podcasts & Shows</span>
-            </button>
+            <Link href="?filter=podcasts" style={{ textDecoration: "none" }}>
+              <button className="library-buttons">
+                <span className="button-names">Podcasts & Shows</span>
+              </button>
+            </Link>
           </div>
 
           <button className="scroll1">
@@ -124,45 +132,9 @@ export async function Playlists() {
 
         <div className="playlist-art-wrapper">
           <ul className="playlists-list">
-            {playlists.map((playlist) => {
-              return (
-                <li className="playlist" id="one" key={playlist.name}>
-                  <div className="playlist-container">
-                    <div className="album-cover-wrapper">
-                      <img
-                        className="album"
-                        aria-hidden="true"
-                        draggable="false"
-                        loading="eager"
-                        src={playlist.albumcover}
-                        data-testid="entity-image"
-                        alt="Liked Songs"
-                      />
-                    </div>
-                    <div className="album-name-wrapper">
-                      <p className="playlist-name">{playlist.name}</p>
-                      <div className="type-container">
-                        <p className="username-type">
-                          <span className="pinned-container">
-                            <svg
-                              className="pinned"
-                              data-encore-id="icon"
-                              role="img"
-                              aria-hidden="false"
-                              viewBox="0 0 16 16"
-                            >
-                              <title>Pinned</title>
-                              <path d="M8.822.797a2.72 2.72 0 0 1 3.847 0l2.534 2.533a2.72 2.72 0 0 1 0 3.848l-3.678 3.678-1.337 4.988-4.486-4.486L1.28 15.78a.75.75 0 0 1-1.06-1.06l4.422-4.422L.156 5.812l4.987-1.337L8.822.797z"></path>
-                            </svg>
-                          </span>
-                          Album • ryanbezman
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
+            {props.display === "playlists" ? <PlaylistsDropdown /> : null}
+            {props.display === "albums" ? <AlbumsDropdown /> : null}
+            {props.display === "artists" ? <ArtistsDropdown /> : null}
           </ul>
         </div>
       </div>

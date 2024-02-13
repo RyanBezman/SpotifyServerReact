@@ -572,10 +572,14 @@ body {
   font-size: 0.875rem;
 }
 .biggest-text {
-  font-size: 6rem;
+  font-size: 4.5rem;
   margin-bottom: 0;
   margin-top: 8px;
   font-weight: 900;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 505px;
 }
 .username-left {
   font-size: 0.875rem;
@@ -1173,4 +1177,7 @@ body {
 }
 .input-search {
   color: black;
+}
+audio {
+  display: none;
 }

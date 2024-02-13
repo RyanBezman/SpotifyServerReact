@@ -1,19 +1,64 @@
 import { PrismaClient } from "@prisma/client";
+import { Playlists } from "./playlists";
+import Link from "next/link";
+import { SongRow } from "./songrow";
 
 const prisma = new PrismaClient();
 
-export async function LikedSongs() {
-  const songs = await prisma.song.findMany({
-    include: {
-      album: {
-        include: {
-          artist: true,
+export async function LikedSongs(props: {
+  playlistId: string;
+  albumId: string;
+  artistId: string;
+  playlistName: string;
+  playlistCover: string;
+}) {
+  let results;
+  if (props.playlistId) {
+    results = await prisma.song.findMany({
+      where: {
+        playlists: {
+          some: {
+            id: +props.playlistId,
+          },
         },
       },
-    },
-  });
-  console.log(songs);
-
+      include: {
+        album: {
+          include: {
+            artist: true,
+          },
+        },
+      },
+    });
+  } else if (props.albumId) {
+    results = await prisma.song.findMany({
+      where: {
+        albumId: +props.albumId,
+      },
+      include: {
+        album: {
+          include: {
+            artist: true,
+          },
+        },
+      },
+    });
+  } else if (props.artistId) {
+    results = await prisma.song.findMany({
+      where: {
+        album: {
+          artistId: +props.artistId,
+        },
+      },
+      include: {
+        album: {
+          include: {
+            artist: true,
+          },
+        },
+      },
+    });
+  }
   function createTime(length: number) {
     const time = length;
     const minutes = Math.floor(time / 60);
@@ -91,22 +136,27 @@ export async function LikedSongs() {
               aria-hidden="false"
               draggable="false"
               loading="eager"
-              src="https://misc.scdn.co/liked-songs/liked-songs-300.png"
+              src={
+                props.albumId &&
+                results?.map((song) => {
+                  return song.album.cover;
+                })
+              }
               alt="Liked Songs"
               className="heart-icon"
-              srcSet="
-      https://misc.scdn.co/liked-songs/liked-songs-300.png 150w,
-      https://misc.scdn.co/liked-songs/liked-songs-300.png 300w,
-      https://misc.scdn.co/liked-songs/liked-songs-640.png 320w,
-      https://misc.scdn.co/liked-songs/liked-songs-640.png 640w
-    "
               sizes="(min-width: 1280px) 232px, 192px"
             />
             <div className="big-text">
               <div className="big-text-wrapper">
                 <span className="big-text-small">Playlist</span>
                 <span>
-                  <h1 className="biggest-text">Liked Songs</h1>
+                  <h1 className="biggest-text">
+                    {props.albumId &&
+                      results?.map((song) => {
+                        return song.album.name;
+                      })}
+                    {props.playlistId && props.playlistName}
+                  </h1>
                 </span>
                 <div className="username-song-count">
                   <div className="username-left">ryanbezman</div>
@@ -170,47 +220,11 @@ export async function LikedSongs() {
               </svg>
             </div>
           </div>
-          {songs.map((song, index) => {
-            console.log(song.album.cover);
+          {results?.map((song, index) => {
             return (
-              <div className="song-row" key={song.id}>
-                <div className="song-number">{index + 1}</div>
-                <div className="song-title">
-                  <img
-                    aria-hidden="false"
-                    draggable="false"
-                    loading="eager"
-                    src={song.album.cover}
-                    alt=""
-                    className="album-image"
-                    width="40"
-                    height="40"
-                  />
-                  <div className="song-container">
-                    <div className="song-name">{song.name}</div>
-                    <div className="artist-wrapper">
-                      {song.explicit ? <div className="explicit">E</div> : null}
-                      <div className="artist-name">
-                        {song.album.artist?.name}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="song-album">{song.album.name}</div>
-                <div className="song-date">Dec 22, 2023</div>
-                <div className="song-liked-time">
-                  <svg
-                    data-encore-id="icon"
-                    role="img"
-                    aria-hidden="true"
-                    viewBox="0 0 16 16"
-                    className="green-heart"
-                  >
-                    <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
-                  </svg>
-                  <div className="time">{createTime(song.length)}</div>
-                </div>
-              </div>
+              <>
+                <SongRow song={song} index={index} />
+              </>
             );
           })}
         </div>
