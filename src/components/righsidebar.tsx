@@ -3,7 +3,7 @@ export function RightSideBar() {
     <>
       <div className="middle-of-night">
         <div>
-          <span>Uber</span>
+          <span>Elley Duhe</span>
         </div>
         <button className="close">
           <svg

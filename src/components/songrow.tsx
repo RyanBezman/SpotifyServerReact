@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
+import { SongContext } from "./clientwrapper";
 
-function createTime(length: number) {
+export function createTime(length: number) {
   const time = length;
   const minutes = Math.floor(time / 60);
   let seconds: number | string = length - minutes * 60;
@@ -31,18 +32,16 @@ export function SongRow({
   };
   index: number;
 }) {
-  const [playingSong, setPlayingSong] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // const [playingSong, setPlayingSong] = useState(false);
+
+  const songContext = useContext(SongContext);
 
   function handleSongClick() {
-    setPlayingSong(!playingSong);
+    songContext?.setPlayingSong(song);
 
-    if (playingSong) {
-      audioRef.current?.play();
-    } else {
-      audioRef.current?.pause();
-    }
+    songContext?.setIsPlaying(!songContext.isPlaying);
   }
+
   return (
     <>
       <div className="song-row" key={song.id} onClick={handleSongClick}>
@@ -81,11 +80,6 @@ export function SongRow({
           <div className="time">{createTime(song.length)}</div>
         </div>
       </div>
-      <audio
-        ref={audioRef}
-        controls
-        src={`${song.name.split(" ").join("").toLowerCase()}.mp3`}
-      ></audio>
     </>
   );
 }

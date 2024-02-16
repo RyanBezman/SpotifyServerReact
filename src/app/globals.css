@@ -1123,6 +1123,15 @@ body {
   flex-grow: 1;
   display: flex;
 }
+.white-part {
+  height: 4px;
+  /* width: 100%; */
+  border-radius: 2px;
+  background-color: white;
+  /* flex-grow: 1; */
+  display: flex;
+}
+
 .bottom-end-container {
   width: 30%;
   display: flex;

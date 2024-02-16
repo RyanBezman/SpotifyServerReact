@@ -7,6 +7,7 @@ import { LikedSongs } from "@/components/likedsongs";
 import { HomeSearch } from "@/components/homesearch";
 import { RightSideBar } from "@/components/righsidebar";
 import { BottomPlayBar } from "@/components/bottomplaybar";
+import { ClientWrapper } from "../components/clientwrapper";
 
 export default function Home(props: {
   searchParams: {
@@ -20,27 +21,29 @@ export default function Home(props: {
 }) {
   return (
     <>
-      <div className="columns">
-        <div className="column1">
-          <HomeSearch />
-          <Playlists display={props.searchParams.filter} />
+      <ClientWrapper>
+        <div className="columns">
+          <div className="column1">
+            <HomeSearch />
+            <Playlists display={props.searchParams.filter} />
+          </div>
+          <div className="column2">
+            <LikedSongs
+              playlistId={props.searchParams.playlistid}
+              playlistCover={props.searchParams.playlistcover}
+              playlistName={props.searchParams.playlistname}
+              albumId={props.searchParams.albumid}
+              artistId={props.searchParams.artistid}
+            />
+          </div>
+          <div className="column3">
+            <RightSideBar />
+          </div>
         </div>
-        <div className="column2">
-          <LikedSongs
-            playlistId={props.searchParams.playlistid}
-            playlistCover={props.searchParams.playlistcover}
-            playlistName={props.searchParams.playlistname}
-            albumId={props.searchParams.albumid}
-            artistId={props.searchParams.artistid}
-          />
+        <div className="bottom-bar">
+          <BottomPlayBar />
         </div>
-        <div className="column3">
-          <RightSideBar />
-        </div>
-      </div>
-      <div className="bottom-bar">
-        <BottomPlayBar />
-      </div>
+      </ClientWrapper>
     </>
   );
 }

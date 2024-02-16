@@ -1,7 +1,16 @@
+"use client";
+import { useContext } from "react";
+import { SongContext } from "./clientwrapper";
+
 export function BottomPlayBar() {
+  const songContext = useContext(SongContext);
+
+  function handlePlayButton() {
+    songContext?.setIsPlaying(!songContext?.isPlaying);
+  }
+
   return (
     <>
-      {" "}
       <div className="now-playing-container">
         <div className="playing-song-container">
           <div className="album-image-wrapper">
@@ -9,7 +18,7 @@ export function BottomPlayBar() {
               aria-hidden="false"
               draggable="false"
               loading="eager"
-              src="https://i.scdn.co/image/ab67616d00001e0253a2e11c1bde700722fecd2e"
+              src={songContext?.playingSong?.album.cover}
               data-testid="cover-art-image"
               alt=""
               className="playing-album-cover"
@@ -17,8 +26,10 @@ export function BottomPlayBar() {
           </div>
           <div className="heart-word">
             <div className="song-bottom-container">
-              <div className="top-bottom">MIDDLE OF THE NIGHT</div>
-              <div className="bottom-bottom">Elley Duhe</div>
+              <div className="top-bottom">{songContext?.playingSong?.name}</div>
+              <div className="bottom-bottom">
+                {songContext?.playingSong?.album.artist?.name}
+              </div>
             </div>
             <div className="mini-heart-container">
               <svg
@@ -62,16 +73,28 @@ export function BottomPlayBar() {
                 </svg>
               </div>
             </div>
-            <button className="play-controls-middle">
-              <svg
-                data-encore-id="icon"
-                role="img"
-                aria-hidden="true"
-                viewBox="0 0 16 16"
-                className="black-play-button"
-              >
-                <path d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288V1.713z"></path>
-              </svg>
+            <button className="play-controls-middle" onClick={handlePlayButton}>
+              {songContext?.isPlaying ? (
+                <svg
+                  data-encore-id="icon"
+                  role="img"
+                  aria-hidden="true"
+                  viewBox="0 0 16 16"
+                  className="black-play-button"
+                >
+                  <path d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7H2.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-2.6z"></path>
+                </svg>
+              ) : (
+                <svg
+                  data-encore-id="icon"
+                  role="img"
+                  aria-hidden="true"
+                  viewBox="0 0 16 16"
+                  className="black-play-button"
+                >
+                  <path d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288V1.713z"></path>
+                </svg>
+              )}
             </button>
             <div className="play-controls-right">
               <div className="button-wrapper-right">
@@ -100,9 +123,21 @@ export function BottomPlayBar() {
           </div>
         </div>
         <div className="playback-bar">
-          <div className="play-time-left">0:03</div>
-          <div className="playbar"></div>
-          <div className="play-time-right">3:04</div>
+          <div className="play-time-left">{songContext?.currentTime}</div>
+          <div
+            className="playbar"
+            onMouseDown={songContext?.handleMouseDown}
+            onMouseMove={songContext?.handleMouseMoving}
+            onMouseUp={songContext?.handleMouseUp}
+          >
+            <div
+              className="white-part"
+              defaultValue="0"
+              ref={songContext?.progressBar}
+              style={songContext?.whiteBarStyle}
+            ></div>
+          </div>
+          <div className="play-time-right">{songContext?.duration}</div>
         </div>
       </div>
       <div className="bottom-end-container">
@@ -168,7 +203,7 @@ export function BottomPlayBar() {
             </svg>
           </button>
           <div className="volume-container">
-            <div className="volume-bar"></div>
+            <input className="volume-bar" type="range" max="100"></input>
           </div>
           <button className="bottom-button-wrapper">
             <svg
