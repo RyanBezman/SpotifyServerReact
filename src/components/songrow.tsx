@@ -1,20 +1,17 @@
 "use client";
-import Link from "next/link";
-import { useRef, useState, useContext, useEffect, MouseEvent } from "react";
+import { MouseEvent, useContext } from "react";
 import { SongContext } from "./clientwrapper";
-import { Song } from "@prisma/client";
 import { addToLiked, removeFromLiked } from "../../actions/actions";
-import { removeAllListeners } from "process";
 
-function createTime(length: number) {
-  const time = length;
+function createTime(time: number) {
   const minutes = Math.floor(time / 60);
-  let seconds: number | string = length - minutes * 60;
+  let seconds: number | string = time - minutes * 60;
   if (seconds < 10) {
     seconds = `0${seconds}`;
   }
   return `${minutes}:${seconds}`;
 }
+
 export function SongRow({
   song,
   index,
@@ -25,6 +22,7 @@ export function SongRow({
     albumId: number;
     name: string;
     length: number;
+    liked: boolean;
     album: {
       name: string;
       cover: string;
@@ -35,32 +33,25 @@ export function SongRow({
   };
   index: number;
 }) {
-  // const [playingSong, setPlayingSong] = useState(false);
-
   const songContext = useContext(SongContext);
-  const [likedSongIds, setLikedSongIds] = useState<number[]>([]);
 
   function handleSongClick() {
     songContext?.setPlayingSong(song);
 
     songContext?.setIsPlaying(!songContext.isPlaying);
   }
-  const handleLikedButton = (event: MouseEvent) => {
+
+  async function handleLike(event: MouseEvent) {
     event.stopPropagation();
 
-    if (likedSongIds.includes(song.id)) {
-      let newState = [...likedSongIds];
-      let index = likedSongIds.indexOf(song.id);
-      newState.splice(index, 1);
+    await addToLiked(song.id);
+  }
 
-      removeFromLiked(song.id);
-      setLikedSongIds([...newState]);
-    } else {
-      addToLiked(song.id);
+  async function handleDislike(event: MouseEvent) {
+    event.stopPropagation();
 
-      setLikedSongIds([...likedSongIds, song.id]);
-    }
-  };
+    await removeFromLiked(song.id);
+  }
 
   return (
     <>
@@ -88,14 +79,14 @@ export function SongRow({
         <div className="song-album">{song.album.name}</div>
         <div className="song-date">Dec 22, 2023</div>
         <div className="song-liked-time">
-          {likedSongIds.includes(song.id) ? (
+          {song.liked ? (
             <svg
               data-encore-id="icon"
               role="img"
               aria-hidden="true"
               viewBox="0 0 16 16"
               className="green-heart"
-              onClick={handleLikedButton}
+              onClick={handleDislike}
             >
               <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
             </svg>
@@ -106,7 +97,7 @@ export function SongRow({
               aria-hidden="true"
               viewBox="0 0 16 16"
               className="white-heart"
-              onClick={handleLikedButton}
+              onClick={handleLike}
             >
               <path d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z"></path>
             </svg>

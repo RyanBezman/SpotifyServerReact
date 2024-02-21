@@ -23,6 +23,11 @@ export async function LikedSongs(props: {
         },
       },
       include: {
+        playlists: {
+          where: {
+            id: 1,
+          },
+        },
         album: {
           include: {
             artist: true,
@@ -36,6 +41,11 @@ export async function LikedSongs(props: {
         albumId: +props.albumId,
       },
       include: {
+        playlists: {
+          where: {
+            id: 1,
+          },
+        },
         album: {
           include: {
             artist: true,
@@ -51,6 +61,7 @@ export async function LikedSongs(props: {
         },
       },
       include: {
+        playlists: true,
         album: {
           include: {
             artist: true,
@@ -59,15 +70,13 @@ export async function LikedSongs(props: {
       },
     });
   }
-  function createTime(length: number) {
-    const time = length;
-    const minutes = Math.floor(time / 60);
-    let seconds: number | string = length - minutes * 60;
-    if (seconds < 10) {
-      seconds = `0${seconds}`;
-    }
-    return `${minutes}:${seconds}`;
-  }
+
+  results = results?.map((result) => {
+    return {
+      ...result,
+      liked: result.playlists.length === 1,
+    };
+  });
 
   return (
     <>
