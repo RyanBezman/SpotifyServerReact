@@ -1,3 +1,5 @@
+import { circularTitle } from "@/app/fonts";
+
 export function RightSideBar() {
   return (
     <>
@@ -29,7 +31,9 @@ export function RightSideBar() {
         />
         <div className="song-details">
           <div className="font-wrapper">
-            <div className="song-header">MIDDLE OF THE NIGHT</div>
+            <div className={`song-header ${circularTitle.className}`}>
+              MIDDLE OF THE NIGHT
+            </div>
             <span className="last-name">Elley Duhé</span>
           </div>
           <svg
