@@ -8,7 +8,6 @@ export function BottomPlayBar() {
   function handlePlayButton() {
     songContext?.setIsPlaying(!songContext?.isPlaying);
   }
-
   return (
     <>
       <div className="now-playing-container">

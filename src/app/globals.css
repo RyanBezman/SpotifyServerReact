@@ -758,6 +758,11 @@ body {
   width: 16px;
   fill: rgb(53, 214, 104);
 }
+.white-heart {
+  height: 16px;
+  width: 16px;
+  filter: invert();
+}
 .time {
   color: #a7a7a7;
   font-size: 0.875rem;

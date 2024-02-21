@@ -49,8 +49,8 @@ type SongContextType = {
 export const SongContext = createContext<SongContextType | null>(null);
 
 type Props = PropsWithChildren;
-function createDuration(length: number): string {
-  const time = Math.floor(length);
+function createDuration(length: number | undefined): string {
+  const time = Math.floor(length || 0);
   const minutes = Math.floor(time / 60);
   let seconds: number | string = time - minutes * 60;
   Math.floor(seconds);
@@ -96,7 +96,7 @@ export function ClientWrapper({ children }: Props) {
 
   function handleMouseMoving(event: MouseEvent) {
     if (isResizing) {
-      let { left } = event.currentTarget.getBoundingClientRect();
+      let { left } = event?.currentTarget?.getBoundingClientRect();
       let dimensions = event.clientX - left;
 
       updateBarWidth(dimensions);
