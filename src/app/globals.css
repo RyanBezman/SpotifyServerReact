@@ -1,7 +1,6 @@
 * {
   box-sizing: border-box;
   color: white;
-  font-family: CircularSp;
   -webkit-font-smoothing: antialiased;
   min-width: 0;
 }
@@ -133,11 +132,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 16px;
   text-align: center;
   padding: 4px 8px;
   border: 0;
+  white-space: nowrap;
 }
 
 .library-logo-wrapper {
@@ -734,7 +734,6 @@ body {
 }
 .song-number {
   width: 16px;
-  /* font-family: Circular Std; */
   font-weight: 400;
   font-size: 1rem;
   color: #a7a7a7;
@@ -852,8 +851,6 @@ body {
   border-radius: 8px;
 }
 .song-header {
-  font-family: CircularSpTitle;
-  -webkit-font-smoothing: antialiased;
   font-weight: bold;
   font-size: 2rem;
   display: flex;
