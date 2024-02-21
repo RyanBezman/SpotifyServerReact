@@ -7,10 +7,6 @@ import { ArtistsDropdown } from "./artistsdropdown";
 const prisma = new PrismaClient();
 
 export async function Playlists(props: { display: string }) {
-  const albums = await prisma.album.findMany({});
-  const playlists = await prisma.playlist.findMany({});
-  const artists = await prisma.artist.findMany({});
-
   return (
     <div className="playlist-wrapper">
       <div className="your-library">
