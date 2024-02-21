@@ -5,6 +5,10 @@
   min-width: 0;
 }
 
+button {
+  font-family: inherit;
+}
+
 .columns {
   display: flex;
   /* max-height: 100vh; */
